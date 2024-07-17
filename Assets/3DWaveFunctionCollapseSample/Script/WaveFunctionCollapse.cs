@@ -6,53 +6,6 @@ using Random = UnityEngine.Random;
 
 namespace _3DWaveFunctionCollapseSample.Script
 {
-    public class Model
-    {
-        
-    }
-
-    public class Prototype
-    {
-        public string model = "mesh.obj";
-        public int rotation = 0;
-        public string[] sockets = new string[6]
-        {
-            "0", //posX
-            "1s", //negX
-            "1s", //posY
-            "0f", //negY
-            "-1", //posZ
-            "v0_0" //negZ
-        };
-
-        public int[] poeX;
-        public int[] negX;
-        public int[] posY;
-        public int[] negY;
-        public int[] posZ;
-        public int[] negZ;
-
-        public bool Judge(string socketA, string socketB)
-        {
-            if (symmetrical)
-            {
-                return socketA == socketB;
-            }
-
-            if (asymmetrical)
-            {
-                return socketA == socketB + "f" || socketA + "f" == socketB;
-            }
-
-            if (vertical)
-            {
-                return socketA == socketB;
-            }
-
-            return false;
-        }
-    }
-
     public class WaveFunctionCollapse
     {
         Vector3Int size;
@@ -60,9 +13,9 @@ namespace _3DWaveFunctionCollapseSample.Script
         private int collapsedCount;
         private Prototype[] allPrototypes;
 
-        private int[] dx = new int[6] { -1,0,1,0,0,0};
-        private int[] dy = new int[6] { 0,-1,0,1,0,0};
-        private int[] dz = new int[6] { 0,0,0,0,-1,1};
+        private int[] dx = new int[6] { 1,-1,0,0,0,0};
+        private int[] dy = new int[6] { 0,0,1,-1,0,0};
+        private int[] dz = new int[6] { 0,0,0,0,1,-1};
 
         private int MX;
         private int MY;
@@ -167,10 +120,10 @@ namespace _3DWaveFunctionCollapseSample.Script
             Prototype prototype = allPrototypes[curCoord];
             for (int i = 0; i < possiblePrototypes.Count; i++)
             {
-                int[] vaildPrototypes = new int[] { };
+                List<int> vaildPrototypes = new List<int>();
                 if (d == 0)
                 {
-                    vaildPrototypes = prototype.poeX;
+                    vaildPrototypes = prototype.posX;
                 }
                 else if (d == 1)
                 {
@@ -193,7 +146,7 @@ namespace _3DWaveFunctionCollapseSample.Script
                     vaildPrototypes = prototype.negZ;
                 }
 
-                for (int j = 0; j < vaildPrototypes.Length; j++)
+                for (int j = 0; j < vaildPrototypes.Count; j++)
                 {
                     possibleNeighbours.Add(vaildPrototypes[j]);
                 }
@@ -243,8 +196,13 @@ namespace _3DWaveFunctionCollapseSample.Script
         {
             while (!IsCollapsed())
             {
-                Iterate();
+                if (!Iterate())
+                {
+                    return false;
+                }
             }
+
+            return true;
         }
     }
 }
