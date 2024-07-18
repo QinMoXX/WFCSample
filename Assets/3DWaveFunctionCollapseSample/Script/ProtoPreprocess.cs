@@ -12,6 +12,7 @@ public static class ProtoPreprocess
     {
         string jsonpPath = Application.dataPath + "/3DWaveFunctionCollapseSample/PrototypeConfig.json";
         var prototypes = LoadJson(jsonpPath);
+        ClearData(prototypes);
         PrototypePreprocess(prototypes);
         SaveJson(jsonpPath, prototypes);
     }
@@ -56,6 +57,19 @@ public static class ProtoPreprocess
         }
     }
 
+    public static void ClearData(List<Prototype> prototypes)
+    {
+        for (int i = 0; i < prototypes.Count; i++)
+        {
+            prototypes[i].posX.Clear();
+            prototypes[i].negX.Clear();
+            prototypes[i].posY.Clear();
+            prototypes[i].negY.Clear();
+            prototypes[i].posZ.Clear();
+            prototypes[i].negZ.Clear();
+        }
+    }
+
     public static bool MatchCheck(string socketA, string socketB, int socketAI, int socketBI)
     {
         //vertical
@@ -69,7 +83,7 @@ public static class ProtoPreprocess
         //asymmetrical
         if (string.Equals(socketA,socketB+"f") | string.Equals(socketA + "f",socketB) )
         {
-            
+            return true;
         }
         //symmetrical
         if (socketA.EndsWith('s') & socketB.EndsWith('s'))
@@ -78,6 +92,11 @@ public static class ProtoPreprocess
             {
                 return true;
             }
+        }
+        //empty
+        if ((socketAI != 2 & socketAI != 3) & string.Equals(socketA,"-1") & string.Equals(socketB, "-1"))
+        {
+            return true;
         }
         
         return false;
