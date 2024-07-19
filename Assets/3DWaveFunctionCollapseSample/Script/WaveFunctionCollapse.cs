@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,22 +49,19 @@ public class WaveFunctionCollapse:MonoBehaviour
         string jsonpPath = Application.dataPath + "/3DWaveFunctionCollapseSample/PrototypeConfig.json";
         var prototypes = ProtoPreprocess.LoadJson(jsonpPath);
         Initialize(size,prototypes);
-        // if (Run())
-        // {
-        //     ShowInstance();
-        // }
+        StartCoroutine(Run());
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!IsCollapsed())
-            {
-                Iterate();
-                ShowInstance();
-            }
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     if (!IsCollapsed())
+        //     {
+        //         Iterate();
+        //         ShowInstance();
+        //     }
+        // }
     }
 
     private List<GameObject> showGameObjects = new List<GameObject>();
@@ -84,10 +82,10 @@ public class WaveFunctionCollapse:MonoBehaviour
                 for (int x = 0; x < size.x; x++)
                 {
                     int index = MXY * z + MX * y + x;
-                    // if (wave[index].Count > 1)
-                    // {
-                    //     continue;
-                    // }
+                    if (wave[index].Count != 1 )
+                    {
+                        continue;
+                    }
                     Prototype prototype = allPrototypes[wave[index][0]];
                     if (prototype != null)
                     {
@@ -138,6 +136,7 @@ public class WaveFunctionCollapse:MonoBehaviour
     public bool Iterate()
     {
         int coord = GetEntropyCoord();
+        Debug.Log("CollapseTo :"+coord);
         CollapseTo(coord);
         if (!Propagate(coord))
         {
@@ -156,11 +155,11 @@ public class WaveFunctionCollapse:MonoBehaviour
     private bool Propagate(int coord)
     {
         Stack<int> stack = new Stack<int>();
-        stack.Append(coord);
+        stack.Push(coord);
         while (stack.Count > 0)
         {
             int curCoord = stack.Pop();
-
+            Debug.Log("Propagate :"+curCoord);
             int z = curCoord / MXY;
             int xy = curCoord % MXY;
             int y = xy / MX;
@@ -177,19 +176,23 @@ public class WaveFunctionCollapse:MonoBehaviour
                 int otherCoord = x2 + y2 * MX + z2 * MXY;
                 var otherPossiblePrototypes = wave[otherCoord];
                 var possibleNeighbours = GetPossibleNeighbours(curCoord, d);
-                if (otherPossiblePrototypes.Count == 0)
+                if (otherPossiblePrototypes.Count <= 1)
                 {
-                    return false;
+                    continue;
                 }
 
-                for (int i = otherPossiblePrototypes.Count; i >=0 ; i--)
+                for (int i = otherPossiblePrototypes.Count -1; i >=0 ; i--)
                 {
                     if (!possibleNeighbours.Contains(otherPossiblePrototypes[i]))
                     {
                         otherPossiblePrototypes.RemoveAt(i);
+                        if (otherPossiblePrototypes.Count <= 1)
+                        {
+                            collapsedCount--;
+                        }
                         if (!stack.Contains(otherCoord))
                         {
-                            stack.Append(otherCoord);
+                            stack.Push(otherCoord);
                         }
                     }
                 }
@@ -203,9 +206,10 @@ public class WaveFunctionCollapse:MonoBehaviour
     {
         var possiblePrototypes = wave[curCoord];
         HashSet<int> possibleNeighbours = new HashSet<int>();
-        Prototype prototype = allPrototypes[curCoord];
+        
         for (int i = 0; i < possiblePrototypes.Count; i++)
         {
+            Prototype prototype = allPrototypes[possiblePrototypes[i]];
             List<int> vaildPrototypes = new List<int>();
             if (d == 0)
             {
@@ -278,17 +282,19 @@ public class WaveFunctionCollapse:MonoBehaviour
 
     
     
-    public bool Run()
+    public IEnumerator Run()
     {
         while (!IsCollapsed())
         {
             if (!Iterate())
             {
-                return false;
+                yield break;
             }
-            
+
+            yield return new WaitForSeconds(0.5f);
+            ShowInstance();
         }
 
-        return true;
+        yield return null;
     }
 }

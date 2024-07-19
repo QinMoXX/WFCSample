@@ -30,7 +30,7 @@ public class SceneGUI:Editor
                     int index = m_WFC.Mxy * z + m_WFC.Mx * y + x;
                     string str = BreakLongString(m_WFC.Wave[index], 5);
                     //显示的坐标文字
-                    Handles.Label( new Vector3(x,y,z) , str);
+                    Handles.Label( new Vector3(x + 0.5f,y,z+0.5f) , str);
                 }
             }
         }
