@@ -6,10 +6,11 @@ using Random = UnityEngine.Random;
 
 public class WaveFunctionCollapse:MonoBehaviour
 {
-    public Vector3Int size;
+    [SerializeField]
+    private Vector3Int size;
     private List<int>[] wave;
     private int collapsedCount;
-    private Prototype[] allPrototypes;
+    private  Prototype[] allPrototypes;
 
     private int[] dx = new int[6] { 1,-1,0,0,0,0};
     private int[] dy = new int[6] { 0,0,1,-1,0,0};
@@ -19,20 +20,63 @@ public class WaveFunctionCollapse:MonoBehaviour
     private int MY;
     private int MZ;
     private int MXY;
+    
+    public Vector3Int Size => size;
+
+    public List<int>[] Wave => wave;
+
+    public int CollapsedCount => collapsedCount;
+
+    public Prototype[] AllPrototypes => allPrototypes;
+
+    public int[] Dx => dx;
+
+    public int[] Dy => dy;
+
+    public int[] Dz => dz;
+
+    public int Mx => MX;
+
+    public int My => MY;
+
+    public int Mz => MZ;
+
+    public int Mxy => MXY;
 
     public void Start()
     {
         string jsonpPath = Application.dataPath + "/3DWaveFunctionCollapseSample/PrototypeConfig.json";
         var prototypes = ProtoPreprocess.LoadJson(jsonpPath);
         Initialize(size,prototypes);
-        if (Run())
+        // if (Run())
+        // {
+        //     ShowInstance();
+        // }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            ShowInstance();
+            if (!IsCollapsed())
+            {
+                Iterate();
+                ShowInstance();
+            }
         }
     }
 
+    private List<GameObject> showGameObjects = new List<GameObject>();
     private void ShowInstance()
     {
+        if (showGameObjects.Count > 0)
+        {
+            for (int i = 0; i < showGameObjects.Count; i++)
+            {
+                Destroy(showGameObjects[i]);
+            }
+        }
+        showGameObjects.Clear();
         for (int z = 0; z < size.z; z++)
         {
             for (int y = 0; y < size.y; y++)
@@ -40,16 +84,22 @@ public class WaveFunctionCollapse:MonoBehaviour
                 for (int x = 0; x < size.x; x++)
                 {
                     int index = MXY * z + MX * y + x;
+                    // if (wave[index].Count > 1)
+                    // {
+                    //     continue;
+                    // }
                     Prototype prototype = allPrototypes[wave[index][0]];
                     if (prototype != null)
                     {
                         GameObject ob = CreateInstance(prototype);
-                        ob.transform.position = new Vector3(x, y, z);
+                        ob.transform.position = new Vector3(x + 0.5f, y, z + 0.5f);
+                        showGameObjects.Add(ob);
                     }
                 }
             }
         }
     }
+    
     
     public GameObject CreateInstance(Prototype prototype)
     {
@@ -236,6 +286,7 @@ public class WaveFunctionCollapse:MonoBehaviour
             {
                 return false;
             }
+            
         }
 
         return true;
