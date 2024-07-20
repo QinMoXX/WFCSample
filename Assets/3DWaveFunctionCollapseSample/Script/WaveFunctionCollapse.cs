@@ -56,18 +56,6 @@ public class WaveFunctionCollapse:MonoBehaviour
         StartCoroutine(Run());
     }
 
-    private void Update()
-    {
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     if (!IsCollapsed())
-        //     {
-        //         Iterate();
-        //         ShowInstance();
-        //     }
-        // }
-    }
-
     private List<GameObject> showGameObjects = new List<GameObject>();
     private void ShowInstance()
     {
@@ -131,7 +119,54 @@ public class WaveFunctionCollapse:MonoBehaviour
         {
             wave[i] = prototypeIndexes.ToList();
         }
+        weights = new int[allPrototypes.Count];
+        weightLogWeights = new double[allPrototypes.Count];
+        sumOfWeights = 0;
+        sumOfWeightLogWeights = 0.0;
+        for (int i = 0; i < weights.Length; i++)
+        {
+            weights[i] = allPrototypes[i].weight;
+            weightLogWeights[i] = weights[i] * Math.Log(weights[i]);
+            sumOfWeights += weights[i];
+            sumOfWeightLogWeights += weightLogWeights[i];
+        }
+        startingEntropy = Math.Log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights;
+
+        sumsOfWeights = new int[collapsedCount];
+        sumsOfWeightLogWeights = new double[collapsedCount];
+        entropies = new double[collapsedCount];
+
+        for (int i = 0; i < collapsedCount; i++)
+        {
+            sumsOfWeights[i] = sumOfWeights;
+            sumsOfWeightLogWeights[i] = sumOfWeightLogWeights;
+            entropies[i] = startingEntropy;
+        }
     }
+
+    /// <summary>
+    /// 熵变
+    /// </summary>
+    /// <param name="coord">变化单元网格</param>
+    /// <param name="prototypeIndex">剔除原型</param>
+    private void EntropieChange(int coord, int prototypeIndex)
+    {
+        double sum = sumsOfWeights[coord] -= weights[prototypeIndex]; //计算权重总和
+        sumsOfWeightLogWeights[coord] -= weightLogWeights[prototypeIndex]; 
+        entropies[coord] = Math.Log(sum) - sumsOfWeightLogWeights[coord] / sum;
+    }
+
+    private int[] weights; //权重列表
+    private int sumOfWeights; //权重总和
+    private double[] weightLogWeights; //权重对数列表
+    private double sumOfWeightLogWeights; //权重对数总和
+    private double startingEntropy;//初始熵
+    private double sumOfLogWeght; //权重对数总和
+    private double sumOfLogWeights; //权重对数总和列表
+
+    private int[] sumsOfWeights; //单元格权重总和列表
+    private double[] sumsOfWeightLogWeights; //单元格权重对数总和列表
+    private double[] entropies; //单元格熵列表
 
     public bool IsCollapsed()
     {
@@ -190,6 +225,9 @@ public class WaveFunctionCollapse:MonoBehaviour
                 {
                     if (!possibleNeighbours.Contains(otherPossiblePrototypes[i]))
                     {
+                        //计算熵
+                        EntropieChange(otherCoord, otherPossiblePrototypes[i]);
+                        //移除态
                         otherPossiblePrototypes.RemoveAt(i);
                         if (otherPossiblePrototypes.Count <= 1)
                         {
@@ -282,8 +320,12 @@ public class WaveFunctionCollapse:MonoBehaviour
         }
         
         // int range = Random.Range(0, possiblePrototypes.Count);
+        //坍缩完成
         possiblePrototypes.Clear();
         possiblePrototypes.Add(prototypeIndex);
+        sumsOfWeights[coord] = 0;
+        sumsOfWeightLogWeights[coord] = 0;
+        entropies[coord] = 0;
         collapsedCount--;
     }
     
@@ -294,13 +336,13 @@ public class WaveFunctionCollapse:MonoBehaviour
     /// <returns></returns>
     private int GetEntropyCoord()
     {
-        int minEntropy = int.MaxValue;
+        double minEntropy = double.MaxValue;
         int minIndex = int.MinValue;
         for (int i = 0; i < wave.Length; i++)
         {
-            if (wave[i].Count > 1 & wave[i].Count < minEntropy)
+            if (wave[i].Count > 1 & entropies[i] < minEntropy)
             {
-                minEntropy = wave[i].Count;
+                minEntropy = entropies[i];
                 minIndex = i;
             }           
         }
