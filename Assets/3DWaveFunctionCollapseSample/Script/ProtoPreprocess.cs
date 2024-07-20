@@ -12,9 +12,13 @@ public static class ProtoPreprocess
     {
         string jsonpPath = Application.dataPath + "/3DWaveFunctionCollapseSample/PrototypeConfig.json";
         var prototypes = LoadJson(jsonpPath);
+        Debug.Log("配置读取成功");
         ClearData(prototypes);
+        Debug.Log("配置清理成功");
         PrototypePreprocess(prototypes);
+        Debug.Log("配置处理成功");
         SaveJson(jsonpPath, prototypes);
+        Debug.Log("配置保存完成");
     }
 
     //对应面下标
@@ -22,6 +26,7 @@ public static class ProtoPreprocess
 
     public static void PrototypePreprocess(List<Prototype> prototypes)
     {
+        int[] weight = new int[prototypes.Count];
         for (int i = 0; i < prototypes.Count; i++)
         {
             var current = prototypes[i];
@@ -32,6 +37,7 @@ public static class ProtoPreprocess
                 {
                     if (MatchCheck(current.sockets[s], contrast.sockets[matchingSurface[s]], s,matchingSurface[s]))
                     {
+                        weight[j]++;
                         if (s == 0)
                         {
                             current.posX.Add(j);
@@ -53,6 +59,14 @@ public static class ProtoPreprocess
                         }
                     }
                 }
+            }
+        }
+
+        for (int i = 0; i < prototypes.Count; i++)
+        {
+            if (prototypes[i].weight != 1)
+            {
+                prototypes[i].weight = weight[i];
             }
         }
     }

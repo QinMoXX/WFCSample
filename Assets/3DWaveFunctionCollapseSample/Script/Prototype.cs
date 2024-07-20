@@ -6,7 +6,7 @@ public class Prototype
     public string model;
     public int rotation;
     public string[] sockets;
-
+    public int weight;
     public List<int> posX;
     public List<int> negX;
     public List<int> posY;
