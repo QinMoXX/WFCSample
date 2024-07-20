@@ -25,6 +25,18 @@ public class WaveFunctionCollapse:MonoBehaviour
     private int MXY;
     
     private int[] weightCache; //权重列表缓存
+    private int[] weights; //权重列表
+    private int sumOfWeights; //权重总和
+    private double[] weightLogWeights; //权重对数列表
+    private double sumOfWeightLogWeights; //权重对数总和
+    private double startingEntropy;//初始熵
+    private double sumOfLogWeght; //权重对数总和
+    private double sumOfLogWeights; //权重对数总和列表
+
+    private int[] sumsOfWeights; //单元格权重总和列表
+    private double[] sumsOfWeightLogWeights; //单元格权重对数总和列表
+    private double[] entropies; //单元格熵列表
+    
     
     public Vector3Int Size => size;
 
@@ -156,17 +168,7 @@ public class WaveFunctionCollapse:MonoBehaviour
         entropies[coord] = Math.Log(sum) - sumsOfWeightLogWeights[coord] / sum;
     }
 
-    private int[] weights; //权重列表
-    private int sumOfWeights; //权重总和
-    private double[] weightLogWeights; //权重对数列表
-    private double sumOfWeightLogWeights; //权重对数总和
-    private double startingEntropy;//初始熵
-    private double sumOfLogWeght; //权重对数总和
-    private double sumOfLogWeights; //权重对数总和列表
 
-    private int[] sumsOfWeights; //单元格权重总和列表
-    private double[] sumsOfWeightLogWeights; //单元格权重对数总和列表
-    private double[] entropies; //单元格熵列表
 
     public bool IsCollapsed()
     {
