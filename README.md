@@ -17,3 +17,4 @@
 4. 运行
 5. （可选）如遇过于规律或不合理的情况，请手动调整 `PrototypeConfig.json`中的权重配置。或者使用同目录下的`PrototypeConfig.json.b`文件覆盖（调整好的权重配置备份文件）
 
+详细的文章描述请直达 [波函数坍塌](https://www.qinmo.world/posts/Unity_3WFC)
