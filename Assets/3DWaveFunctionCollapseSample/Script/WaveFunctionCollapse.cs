@@ -24,6 +24,8 @@ public class WaveFunctionCollapse:MonoBehaviour
     private int MZ;
     private int MXY;
     
+    private int[] weightCache; //权重列表缓存
+    
     public Vector3Int Size => size;
 
     public List<int>[] Wave => wave;
@@ -116,6 +118,7 @@ public class WaveFunctionCollapse:MonoBehaviour
     {
         this.size = size;
         this.allPrototypes = allPrototypes.ToArray();
+        this.weightCache = new int[allPrototypes.Count];
         collapsedCount = size.z * size.y * size.x;
         MX = size.x;
         MY = size.y;
@@ -247,7 +250,7 @@ public class WaveFunctionCollapse:MonoBehaviour
         return possibleNeighbours;
     }
 
-
+    
     /// <summary>
     /// 坍缩唯一解
     /// </summary>
@@ -255,8 +258,30 @@ public class WaveFunctionCollapse:MonoBehaviour
     public void CollapseTo(int coord)
     {
         List<int> possiblePrototypes = wave[coord];
-        int range = Random.Range(0, possiblePrototypes.Count);
-        int prototypeIndex = possiblePrototypes[range];
+        for (int i = 0; i < weightCache.Length; i++)
+        {
+            weightCache[i] = 0;
+        }
+        float sumOfWeights = 0;
+        for (int i = 0; i < possiblePrototypes.Count; i++)
+        {
+            int index = possiblePrototypes[i];
+            weightCache[index] = allPrototypes[index].weight;
+            sumOfWeights += weightCache[index];
+        }
+        int prototypeIndex = 0;
+        float range = Random.Range(0f, sumOfWeights);
+        for (int i = 0; i < weightCache.Length; i++)
+        {
+            range -= weightCache[i];
+            if (range <= 0)
+            {
+                prototypeIndex = i;
+                break;
+            }
+        }
+        
+        // int range = Random.Range(0, possiblePrototypes.Count);
         possiblePrototypes.Clear();
         possiblePrototypes.Add(prototypeIndex);
         collapsedCount--;
