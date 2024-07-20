@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1803670654247939627}
   - component: {fileID: 5356319778715860320}
-  - component: {fileID: 1659399904044508246}
   m_Layer: 0
   m_Name: D_t
   m_TagString: Untagged
@@ -85,40 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1659399904044508246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7471043227478524860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50cb30021d414e8db9abb8415262010a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upNeighbors:
-  - {fileID: 4339755681791414768, guid: a8a58e44d0fe22d4cb7843c8f51d0dc1, type: 3}
-  - {fileID: 6462556795196303063, guid: 4edd7a4898f4a754d997bb1281488d4c, type: 3}
-  - {fileID: 8614285480361339922, guid: af1d7b22cd0fce940a0ffe993c5952e5, type: 3}
-  - {fileID: 1663764995145872624, guid: 4ebe30fee23dcbc48bbfd38fad7a3659, type: 3}
-  downNeighbors:
-  - {fileID: 5098845351742610229, guid: d0404a2a901f2774ca55072c80c36d9d, type: 3}
-  - {fileID: 5029516177551010246, guid: b47eac539b37af341a76bf80d5f06ddf, type: 3}
-  - {fileID: 4339755681791414768, guid: a8a58e44d0fe22d4cb7843c8f51d0dc1, type: 3}
-  - {fileID: 1965764897297419570, guid: 6135286173639704da4536cf39b54c4d, type: 3}
-  - {fileID: 1663764995145872624, guid: 4ebe30fee23dcbc48bbfd38fad7a3659, type: 3}
-  - {fileID: 6565067995335237079, guid: aebb2ed388f180f498e87c0d6d1bf9bb, type: 3}
-  - {fileID: 1771774283983245164, guid: 3c43237e6ddb03a4281f065cef4b8426, type: 3}
-  leftNeighbors:
-  - {fileID: 5029516177551010246, guid: b47eac539b37af341a76bf80d5f06ddf, type: 3}
-  - {fileID: 1659399904044508246}
-  - {fileID: 6462556795196303063, guid: 4edd7a4898f4a754d997bb1281488d4c, type: 3}
-  - {fileID: 3250343475053313231, guid: d91bc066cfaff9b4791049d5e9948706, type: 3}
-  - {fileID: 7414721904034818513, guid: 6c3ac627cdd5d354aa1f350c1489f7a1, type: 3}
-  rightNeighbors:
-  - {fileID: 5029516177551010246, guid: b47eac539b37af341a76bf80d5f06ddf, type: 3}
-  - {fileID: 1659399904044508246}
-  - {fileID: 6462556795196303063, guid: 4edd7a4898f4a754d997bb1281488d4c, type: 3}
-  - {fileID: 3250343475053313231, guid: d91bc066cfaff9b4791049d5e9948706, type: 3}
-  - {fileID: 7414721904034818513, guid: 6c3ac627cdd5d354aa1f350c1489f7a1, type: 3}

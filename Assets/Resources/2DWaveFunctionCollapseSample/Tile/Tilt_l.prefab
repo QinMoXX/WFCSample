@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4010449075116576527}
   - component: {fileID: 6109786555033059137}
-  - component: {fileID: 4201029052449627035}
   m_Layer: 0
   m_Name: Tilt_l
   m_TagString: Untagged
@@ -85,27 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4201029052449627035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192182817740302576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50cb30021d414e8db9abb8415262010a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upNeighbors:
-  - {fileID: 3250343475053313231, guid: d91bc066cfaff9b4791049d5e9948706, type: 3}
-  - {fileID: 8126730132078109972, guid: 5413961bc42654144a37cb1913c22c62, type: 3}
-  downNeighbors:
-  - {fileID: 7414721904034818513, guid: 6c3ac627cdd5d354aa1f350c1489f7a1, type: 3}
-  - {fileID: 8126730132078109972, guid: 5413961bc42654144a37cb1913c22c62, type: 3}
-  leftNeighbors:
-  - {fileID: 6565067995335237079, guid: aebb2ed388f180f498e87c0d6d1bf9bb, type: 3}
-  - {fileID: 8126730132078109972, guid: 5413961bc42654144a37cb1913c22c62, type: 3}
-  rightNeighbors:
-  - {fileID: 1663764995145872624, guid: 4ebe30fee23dcbc48bbfd38fad7a3659, type: 3}
-  - {fileID: 8126730132078109972, guid: 5413961bc42654144a37cb1913c22c62, type: 3}
