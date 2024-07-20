@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class WaveFunctionCollapse:MonoBehaviour
 {
+    [Header("runtime display")]
+    public bool RunTime = true;
     [SerializeField]
     private Vector3Int size;
     private List<int>[] wave;
@@ -159,7 +161,7 @@ public class WaveFunctionCollapse:MonoBehaviour
         while (stack.Count > 0)
         {
             int curCoord = stack.Pop();
-            Debug.Log("Propagate :"+curCoord);
+            // Debug.Log("Propagate :"+curCoord);
             int z = curCoord / MXY;
             int xy = curCoord % MXY;
             int y = xy / MX;
@@ -291,7 +293,14 @@ public class WaveFunctionCollapse:MonoBehaviour
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.5f);
+            if (RunTime)
+            {
+                yield return new WaitForSeconds(0.1f);
+                ShowInstance();
+            }
+        }
+        if (!RunTime)
+        {
             ShowInstance();
         }
 
